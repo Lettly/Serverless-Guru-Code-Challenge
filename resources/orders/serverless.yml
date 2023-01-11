@@ -1,0 +1,16 @@
+# serverless.yml
+service: cs-resources-orders
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: eu-central-1
+
+resources:
+  - ${file(./tables/orders.yml)}
+
+  - Outputs:
+      OrdersTableId:
+        Value: !Ref ordersTable
+      OrdersTableArn:
+        Value: !GetAtt ordersTable.Arn

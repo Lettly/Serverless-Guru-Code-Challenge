@@ -1,0 +1,13 @@
+{
+  "name": "Serverless-Guru-Code-Challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Lettly/Serverless-Guru-Code-Challenge.git",
+  "author": "Marco Giuseppini <giuseppini.marco@live.it>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "resources/**",
+    "services/**"
+  ]
+}
