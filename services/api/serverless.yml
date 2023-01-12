@@ -1,0 +1,37 @@
+service: cs-service-api
+frameworkVersion: "3"
+
+plugins:
+  - serverless-export-env
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-central-1
+  environment:
+    STAGE: ${opt:stage}
+    API_URL: !GetAtt HttpApi.ApiEndpoint
+
+custom:
+  #Dependency stacks
+  RESOURCE_ORDERS_STACK: cs-resources-orders-${opt:stage}
+
+  webpack:
+    webpackConfig: webpack.config.js
+    packager: "yarn"
+    includeModules:
+      forceExclude:
+        - aws-sdk
+
+functions:
+  - ${file(./crud-orders/create/createLambda.yml)}
+  - ${file(./crud-orders/read/readLambda.yml)}
+  - ${file(./crud-orders/update/updateLambda.yml)}
+  - ${file(./crud-orders/delete/deleteLambda.yml)}
+
+resources:
+  Outputs:
+    ApiUrl:
+      Value: !GetAtt HttpApi.ApiEndpoint
