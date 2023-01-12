@@ -1,5 +1,6 @@
 "use strict";
 import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
@@ -7,13 +8,13 @@ const doc = DynamoDBDocumentClient.from(client)
 export async function handler(event) {
     const { body } = event;
     //create an order for a coffey shop
-    const { costumerId, date } = JSON.parse(body);
-    if (!costumerId || !date) {
+    const { customerId, date } = JSON.parse(body);
+    if (!customerId || !date) {
         return {
             statusCode: 400,
             body: JSON.stringify({
                 error: "Missing parameters",
-                description: "You must provide a costumerId and a date"
+                description: "You must provide a customerId and a date"
             }),
         };
     }
@@ -23,7 +24,7 @@ export async function handler(event) {
         const command = new DeleteCommand({
             TableName: process.env.ORDERS_TABLE,
             Key: {
-                costumerId,
+                customerId,
                 date,
             },
         });
@@ -34,7 +35,7 @@ export async function handler(event) {
             statusCode: 200,
             body: JSON.stringify({
                 order: {
-                    costumerId,
+                    customerId,
                     date,
                 }
             }),

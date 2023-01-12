@@ -1,25 +1,28 @@
 "use strict";
-import { DynamoDBDocumentClient, GetCommand, DeleteCommand, ScanCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
 
 export async function handler(event) {
+    console.log("event", event);
     const { body } = event;
     //create an order for a coffey shop
-    const { costumerId, item, quantity } = JSON.parse(body);
-    if (!costumerId || !item || !quantity) {
+    const { customerId, item, quantity } = JSON.parse(body);
+    if (!customerId || !item || !quantity) {
+        console.log(customerId, item, quantity);
         return {
             statusCode: 400,
             body: JSON.stringify({
                 error: "Missing parameters",
-                description: "You must provide a costumerId, an item and a quantity"
+                description: "You must provide a customerId, an item and a quantity"
             }),
         };
     }
 
     const order = {
-        costumerId,
+        customerId,
         date: new Date().toISOString(),
         item,
         quantity,

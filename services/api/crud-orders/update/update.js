@@ -1,18 +1,19 @@
 "use strict";
-import { DynamoDBDocumentClient, GetCommand, DeleteCommand, ScanCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
 export async function handler(event) {
     const { body } = event;
     //update an order for a coffey shop
-    const { costumerId, item, quantity, status } = JSON.parse(body);
-    if (!costumerId || !item) {
+    const { customerId, item, quantity, status } = JSON.parse(body);
+    if (!customerId || !item) {
         return {
             statusCode: 400,
             body: JSON.stringify({
                 error: "Missing parameters",
-                description: "You must provide a costumerId, an item and a quantity"
+                description: "You must provide a customerId, an item and a quantity"
             }),
         };
     }
@@ -43,7 +44,7 @@ export async function handler(event) {
         const command = new UpdateCommand({
             TableName: process.env.ORDERS_TABLE,
             Key: {
-                costumerId: costumerId,
+                customerId: customerId,
                 date: date,
             },
             UpdateExpression: `set ${updateExpression}`,
@@ -54,7 +55,7 @@ export async function handler(event) {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                order: { ...order, costumerId, date },
+                order: { ...order, customerId, date },
             }),
         };
     } catch (error) {

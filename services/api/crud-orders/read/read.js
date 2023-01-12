@@ -1,14 +1,15 @@
 "use strict";
-import { DynamoDBDocumentClient, GetCommand, DeleteCommand, ScanCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
 export async function handler(event) {
     const { body } = event;
-    const { costumerId, date, exclusiveStartKey } = JSON.parse(body);
+    const { customerId, date, exclusiveStartKey } = JSON.parse(body);
 
     try {
-        if (!costumerId || !date) {
+        if (!customerId || !date) {
             const orders = await scanDB(exclusiveStartKey)
 
             return {
@@ -24,7 +25,7 @@ export async function handler(event) {
         const command = new GetCommand({
             TableName: process.env.ORDERS_TABLE,
             Key: {
-                costumerId,
+                customerId,
                 date,
             }
         });
