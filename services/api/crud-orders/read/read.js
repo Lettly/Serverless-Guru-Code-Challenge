@@ -1,5 +1,5 @@
 "use strict";
-import { DynamoDBDocumentClient, GetCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
@@ -10,15 +10,13 @@ export async function handler(event) {
 
     try {
         if (!customerId || !date) {
-            const orders = await scanDB()
-
             return {
-                statusCode: 200,
+                statusCode: 400,
                 body: JSON.stringify({
-                    orders: orders.Items
+                    error: "Missing parameters",
+                    description: "You must provide a customerId and a date"
                 }),
             };
-
         }
 
         //Get the order from the database
@@ -48,14 +46,3 @@ export async function handler(event) {
         };
     }
 }
-
-async function scanDB(ExclusiveStartKey) {
-    const command = new ScanCommand({
-        TableName: process.env.ORDERS_TABLE,
-        ExclusiveStartKey: ExclusiveStartKey,
-    });
-
-    const result = await doc.send(command);
-    return result;
-}
-
