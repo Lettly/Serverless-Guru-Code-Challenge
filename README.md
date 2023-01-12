@@ -98,5 +98,5 @@ The steps are the following:
 5. Deploy the resource and service
 6. Run the E2E test
 
-
-
+## Video
+This is the link to the video that explain all the project [https://www.loom.com/share/04d01edd61244d66b7a7568f71f2eb35](https://www.loom.com/share/04d01edd61244d66b7a7568f71f2eb35) 
