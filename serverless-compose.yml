@@ -1,0 +1,7 @@
+services:
+  resource-orders:
+    path: resources/orders
+
+  service-api:
+    path: services/api
+    dependsOn: resource-orders
