@@ -5,9 +5,10 @@ const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
 export async function handler(event) {
+    console.log("event", event);
     const { body } = event;
     //update an order for a coffey shop
-    const { customerId, item, quantity, status } = JSON.parse(body);
+    const { customerId, item, quantity, status, date } = JSON.parse(body);
     if (!customerId || !item) {
         return {
             statusCode: 400,
@@ -35,7 +36,11 @@ export async function handler(event) {
 
     try {
         //generate the update expression
-        const updateExpression = Object.keys(order).map((key) => `${key} = :${key}`).join(', ');
+        const updateExpression = Object.keys(order).map((key) => `#${key} = :${key}`).join(', ');
+        const expressionAttributeNames = Object.keys(order).reduce((acc, key) => {
+            acc[`#${key}`] = key;
+            return acc;
+        }, {});
         const expressionAttributeValues = Object.keys(order).reduce((acc, key) => {
             acc[`:${key}`] = order[key];
             return acc;
@@ -48,8 +53,10 @@ export async function handler(event) {
                 date: date,
             },
             UpdateExpression: `set ${updateExpression}`,
+            ExpressionAttributeNames: expressionAttributeNames,
             ExpressionAttributeValues: expressionAttributeValues,
         });
+
         await doc.send(command);
 
         return {
