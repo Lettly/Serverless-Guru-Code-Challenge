@@ -34,3 +34,5 @@ resources:
   Outputs:
     OrdersTable:
       Value: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
+    Region:
+      Value: ${self:provider.region}
