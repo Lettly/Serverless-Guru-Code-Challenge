@@ -1,0 +1,18 @@
+readPendingOrders:
+  handler: crud-orders/readPending/readPending.handler
+  memorySize: 128
+  timeout: 3
+  runtime: nodejs16.x
+  environment:
+    ORDERS_TABLE: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
+  events:
+    - httpApi:
+        path: /orders
+        method: GET
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+      Resource:
+        - ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableArn}/index/byStatusDate
