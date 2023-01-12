@@ -2,9 +2,9 @@ service: cs-service-api
 frameworkVersion: "3"
 
 plugins:
-  - serverless-export-env
   - serverless-webpack
   - serverless-iam-roles-per-function
+  - serverless-export-outputs
 
 provider:
   name: aws
@@ -12,7 +12,6 @@ provider:
   region: eu-central-1
   environment:
     STAGE: ${opt:stage}
-    API_URL: !GetAtt HttpApi.ApiEndpoint
 
 custom:
   #Dependency stacks
@@ -33,5 +32,5 @@ functions:
 
 resources:
   Outputs:
-    ApiUrl:
-      Value: !GetAtt HttpApi.ApiEndpoint
+    OrdersTable:
+      Value: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
