@@ -4,11 +4,15 @@ Resources:
     Properties:
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: customerId
+          AttributeType: S
+        - AttributeName: date
           AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: customerId
           KeyType: HASH
+        - AttributeName: date
+          KeyType: RANGE
       # I'm are too poor to enable point in time recovery
       # PointInTimeRecoverySpecification:
       #   PointInTimeRecoveryEnabled: true
