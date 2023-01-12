@@ -30,7 +30,7 @@ jobs:
         with:
           cmd: install
 
-      - name: Deploy resources-orders
+      - name: Deploy stacks
         run: sls deploy --stage ${{ github.head_ref || github.ref_name }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
