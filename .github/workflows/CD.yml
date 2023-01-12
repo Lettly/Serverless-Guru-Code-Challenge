@@ -7,7 +7,7 @@ on:
 
 jobs:
   cd:
-    name: cd-workflow
+    name: Constant Deploy Workflow
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,9 +32,15 @@ jobs:
 
       - name: Deploy resources-orders
         run: cd resources/orders && sls deploy --stage ${{ github.head_ref || github.ref_name }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy service-api
         run: cd services/api && sls deploy --stage ${{ github.head_ref || github.ref_name }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Run tests
         uses: borales/actions-yarn@v4
