@@ -21,25 +21,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      
+
       - name: Install Serverless Framework
         run: npm i -g serverless
-      
-      - name: Install the dependecy
+
+      - name: Install the dependency
         uses: borales/actions-yarn@v4
         with:
           cmd: install
-          
-      
-          
-      - name: Deploy resurce-oreders
-        run: cd resurces/orders && sls deploy --stage ${{ github.head_ref || github.ref_name }} 
-      
+
+      - name: Deploy resources-orders
+        run: cd resources/orders && sls deploy --stage ${{ github.head_ref || github.ref_name }}
+
       - name: Deploy service-api
-        run: cd services/api && sls deploy --stage ${{ github.head_ref || github.ref_name }} 
-      
+        run: cd services/api && sls deploy --stage ${{ github.head_ref || github.ref_name }}
+
       - name: Run tests
         uses: borales/actions-yarn@v4
         with:
           cmd: test
-          dir: 'services/api'
+          dir: "services/api"
