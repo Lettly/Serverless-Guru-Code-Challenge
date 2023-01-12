@@ -6,9 +6,9 @@ const doc = DynamoDBDocumentClient.from(client)
 
 
 export async function handler(event) {
-    const { body } = event;
-    //create an order for a coffey shop
-    const { customerId, date } = JSON.parse(body);
+    console.log("event", event);
+    const { customerId, date } = event.pathParameters
+
     if (!customerId || !date) {
         return {
             statusCode: 400,
