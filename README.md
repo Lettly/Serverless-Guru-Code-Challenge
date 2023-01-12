@@ -42,4 +42,61 @@ Please feel free to include any of the following to show additional experience:
 
 <br>
 
+---
 # Coffee Shop APIs
+I chose to create a coffee shop api to to pay homage to [serverlesspresso](https://workshop.serverlesscoffee.com/) 
+
+## Infrastructure 
+The infrastructure is very simple consist on 2 different stack one for the resource and one for the service. With this approach we can have a better control of the deploy.
+
+![infrastructure](/ServerlessGuro%20CC.drawio.png)
+> Diagram of the infrastructure
+
+## Resource
+Inside the resource stack I created the DynamoDB table to store the orders from the coffe shop. 
+The table has the following structure:
+
+| Key | Type | Notes | KeyType | 
+| --- | --- | --- | --- |
+| customerId | String | The id of the customer | HASH |
+| date | String | The date of the order | RANGE |
+| item | String | The item ordered | |
+| quantity | Number | The quantity of the item ordered | |
+| status | String | The status of the order (can be: pending, ready or delivered) | |
+
+The table has a global secondary index to query the orders by status and date. 
+The index has the following structure:
+| Key  | KeyType |
+| --- | --- |
+| status | HASH |
+| date | RANGE |
+
+## Service
+Inside the service stack I created the API Gateway and the lambda functions.
+The API Gateway has the following endpoints:
+
+| Method | Path | Notes | Body Parameters |
+| --- | --- | --- | --- | 
+| GET | /orders | Get all the orders pending asc | |
+| GET | /orders/{customerId}/{date} | Get the order by customerId and date | |
+| POST | /orders | Create a new order | **customerId**, item, quantity |
+| PUT | /orders | Update the order by customerId and date | **customerId**, **date**, item, quantity, status |
+| DELETE | /orders/{customerId}/{date} | Delete the order by customerId and date |
+
+> Parameters with **bold** are required. For a description of every parameters please refer to [the table structure inside the Resource](##Resource)
+
+## Test
+For the test I used [Jest](https://jestjs.io/). I created E2E test for the service. if I had more time I would have done the unit tests and the integration test. But given the fact that I had to chose, I chose to do the E2E test, because are more complete and give me more confidence that the service is working as expected.
+
+## CI/CD
+For the continuous deployment I used [GitHub Actions](https://github.com/features/actions). I created a workflow that will deploy all the resource and service, with the stage equal to the branch name, on every push to a branch.
+The steps are the following:
+1. Checkout the code
+2. Install NodeJS
+3. Install Serverless Framework
+4. Install the dependencies
+5. Deploy the resource and service
+6. Run the E2E test
+
+
+
