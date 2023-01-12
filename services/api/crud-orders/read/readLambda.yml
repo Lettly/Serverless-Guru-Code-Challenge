@@ -7,7 +7,7 @@ readOrders:
     ORDERS_TABLE: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
   events:
     - httpApi:
-        path: /orders
+        path: /orders/{customerId}/{date}
         method: GET
 
   iamRoleStatements:

@@ -5,17 +5,17 @@ const client = new DynamoDBClient();
 const doc = DynamoDBDocumentClient.from(client)
 
 export async function handler(event) {
-    const { body } = event;
-    const { customerId, date, exclusiveStartKey } = JSON.parse(body);
+    console.log("event", event);
+    const { customerId, date } = event.pathParameters
 
     try {
         if (!customerId || !date) {
-            const orders = await scanDB(exclusiveStartKey)
+            const orders = await scanDB()
 
             return {
                 statusCode: 200,
                 body: JSON.stringify({
-                    orders: orders
+                    orders: orders.Items
                 }),
             };
 
@@ -35,7 +35,7 @@ export async function handler(event) {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                order: order
+                order: order.Item
             }),
         };
     } catch (error) {
