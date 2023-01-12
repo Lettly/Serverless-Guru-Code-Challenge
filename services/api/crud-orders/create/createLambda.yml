@@ -1,0 +1,18 @@
+createOrders:
+  handler: crud-orders/create/create.handler
+  memorySize: 128
+  timeout: 3
+  runtime: nodejs16.x
+  environment:
+    ORDERS_TABLE: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
+  events:
+    - httpApi:
+        path: /orders
+        method: POST
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableArn}

@@ -1,0 +1,18 @@
+updateOrders:
+  handler: crud-orders/update/update.handler
+  memorySize: 128
+  timeout: 3
+  runtime: nodejs16.x
+  environment:
+    ORDERS_TABLE: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
+  events:
+    - httpApi:
+        path: /orders
+        method: PUT
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:UpdateItem
+      Resource:
+        - ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableArn}

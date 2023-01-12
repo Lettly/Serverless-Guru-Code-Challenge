@@ -1,0 +1,19 @@
+readOrders:
+  handler: crud-orders/read/read.handler
+  memorySize: 128
+  timeout: 3
+  runtime: nodejs16.x
+  environment:
+    ORDERS_TABLE: ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableId}
+  events:
+    - httpApi:
+        path: /orders
+        method: GET
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:Scan
+      Resource:
+        - ${cf:${self:custom.RESOURCE_ORDERS_STACK}.OrdersTableArn}
