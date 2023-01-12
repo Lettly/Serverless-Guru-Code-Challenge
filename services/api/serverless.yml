@@ -27,6 +27,7 @@ custom:
 functions:
   - ${file(./crud-orders/create/createLambda.yml)}
   - ${file(./crud-orders/read/readLambda.yml)}
+  - ${file(./crud-orders/readPending/readPendingLambda.yml)}
   - ${file(./crud-orders/update/updateLambda.yml)}
   - ${file(./crud-orders/delete/deleteLambda.yml)}
 
