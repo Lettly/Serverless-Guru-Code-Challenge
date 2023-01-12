@@ -49,7 +49,7 @@ I chose to create a coffee shop api to to pay homage to [serverlesspresso](https
 ## Infrastructure 
 The infrastructure is very simple consist on 2 different stack one for the resource and one for the service. With this approach we can have a better control of the deploy.
 
-![infrastructure](/ServerlessGuro%20CC.drawio.png)
+![infrastructure](/ServerlessGuru%20CC.drawio.png)
 > Diagram of the infrastructure
 
 ## Resource
